@@ -21,6 +21,14 @@ request.setCharacterEncoding("utf-8");
 Date date =new Date();
 SimpleDateFormat f = new SimpleDateFormat("HH:MM:SS");
 String str = f.format(date);
+String text1=request.getParameter("text1");
+String text2=request.getParameter("text2");
+if(text1==null){
+	text1="";
+}
+if(text2==null){
+	text2="";
+}
 %>
 <div class="container">
 	<form action = "text3a.jsp" method="get">
@@ -52,11 +60,11 @@ String str = f.format(date);
 		<tbody>
 			<tr>
 				<td>text1</td>
-				<td><%=request.getParameter("text1")%></td>
+				<td><%=text1%></td>
 			</tr>
 			<tr>
 				<td>text2</td>
-				<td><%=request.getParameter("text2")%></td>
+				<td><%=text2%></td>
 			</tr>
 			<tr>
 				<td>time</td>
