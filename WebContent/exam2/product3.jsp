@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*,jdbc.*" %>
+<%@ page import="java.util.*,exam2.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -14,20 +14,27 @@ table.table { width: 500px; }
 thead tr { background-color: #eee; }  
 </style>
 <%
-String name=request.getParameter("name")==null?"":request.getParameter("name");
-List<Product> list = ProductDAO.findName(name);
+String s=request.getParameter("select");
+int id=(s==null?0:Integer.parseInt(s));
+List<Product> list = id==0?ProductDAO.findAll():ProductDAO.findCategory(id);
 %>
 </head>
 <body>
 <div class="container">
 	<h1>제품목록</h1>
-	<form>
-		<div class="form-inline">
-			<label>제품명</label>
-			<input type="text" class="form-control" name="name" style="width:200px" placeholder="검색조건">
-			<button class="btn btn-primary">조회</button>
+	<form class="form-inline">
+		<div class="form-group">
+		<label>제품유형</label>
+		<select class="form-control" style="width:200px" name="select">	
+			<option value="0" <%=id==0?"selected":""%>>전체</option>
+			<%for(Category category:CategoryDAO.findAll()){%>
+			<option value="<%=category.getId()%>" <%=id==category.getId()?"selected":""%>><%=category.getName() %></option>
+			<%} %>
+		</select>
 		</div>
+		<button type="submit" class="btn btn-primary">조회</button>
 	</form>
+	
 	<table class="table table-bordered table-condensed">
     <thead>
         <tr>
@@ -51,6 +58,5 @@ List<Product> list = ProductDAO.findName(name);
     </tbody>
 </table>
 </div>
-
 </body>
 </html>

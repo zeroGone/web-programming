@@ -1,4 +1,4 @@
-package jdbc;
+package exam2;
 
 public class Category {
 	int id;
