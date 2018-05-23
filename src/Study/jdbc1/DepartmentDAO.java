@@ -10,8 +10,7 @@ import Study.jdbc1.DB;
 public class DepartmentDAO {
 
 	public static List<Department> findAll() throws Exception {
-		String sql = "SELECT * " +
-				"FROM department";
+		String sql = "SELECT * " + "FROM department";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery()) {

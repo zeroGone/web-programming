@@ -10,8 +10,7 @@ import Study.jdbc1.DB;
 public class StudentDAO {
 
 	public static List<Student> findAll() throws Exception {
-		String sql = "SELECT s.*, d.departmentName " +
-				"FROM student s LEFT JOIN department d ON s.departmentId = d.id";
+		String sql = "SELECT s.*, d.departmentName " + "FROM student s LEFT JOIN department d ON s.departmentId = d.id";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery()) {
