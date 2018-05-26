@@ -1,4 +1,4 @@
-package Study.jdbc5;
+package Study.jdbc7;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

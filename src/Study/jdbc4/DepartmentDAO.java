@@ -4,7 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import Study.jdbc1.DB;
+
+import lecture1.DB;
 
 public class DepartmentDAO {
 

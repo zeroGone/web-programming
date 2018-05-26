@@ -1,4 +1,4 @@
-package Study.jdbc1;
+package lecture1;
 
 import java.sql.Connection;
 import java.sql.SQLException;

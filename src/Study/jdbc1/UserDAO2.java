@@ -7,7 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import Study.jdbc1.DB;
+
+import lecture1.DB;
 
 public class UserDAO2 {
 	public static String sql = "SELECT * FROM USER ";

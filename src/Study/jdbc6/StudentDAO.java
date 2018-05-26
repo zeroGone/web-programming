@@ -1,4 +1,4 @@
-package Study.jdbc4;
+package Study.jdbc6;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,14 +10,22 @@ import lecture1.DB;
 
 public class StudentDAO {
 
-    public static List<Student> findAll(int currentPage, int pageSize) throws Exception {
+    public static List<Student> findByName(String name, int currentPage, int pageSize, String od) throws Exception {
+        String order = "ID";
+        switch (od) {
+        case "1": order = "departmentName"; break;
+        case "2": order = "year"; break;
+        }
         String sql = "SELECT s.*, d.departmentName" +
                      " FROM student s LEFT JOIN department d ON s.departmentId = d.id" +
+                     " WHERE name LIKE ?" +
+                     " ORDER BY " + order +
                      " LIMIT ?, ?";
         try (Connection connection = DB.getConnection("student1");
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, (currentPage - 1) * pageSize);
-            statement.setInt(2, pageSize);
+            statement.setString(1, name + "%");
+            statement.setInt(2, (currentPage - 1) * pageSize);
+            statement.setInt(3, pageSize);
             try (ResultSet resultSet = statement.executeQuery()) {
                 ArrayList<Student> list = new ArrayList<Student>();
                 while (resultSet.next()) {
@@ -35,13 +43,15 @@ public class StudentDAO {
         }
     }
 
-    public static int count() throws Exception {
-        String sql = "SELECT COUNT(*) FROM student";
+    public static int count(String name) throws Exception {
+        String sql = "SELECT COUNT(*) FROM student WHERE name LIKE ?";
         try (Connection connection = DB.getConnection("student1");
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name + "%");
+            try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next())
                     return resultSet.getInt(1);
+            }
         }
         return 0;
     }

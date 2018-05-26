@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lecture1.DB;
+
 public class StudentDAO3 {
 
 	private static Student creatStudent(ResultSet resultSet) throws SQLException {// 학생만드는것의 반복성을 줄이기 위한 메소드
