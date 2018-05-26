@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="Study.jdbc4.*, java.util.*, lecture1.*" %>
+<%@ page import="Study.jdbc4.*, java.util.*,lecture1.*" %>
 <%
 request.setCharacterEncoding("UTF-8");
 

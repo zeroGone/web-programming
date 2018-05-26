@@ -1,40 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="Study.jdbc4.*, java.util.*,lecture1.*" %>
+<%@ page import="Study.jdbc5.*, java.net.*,java.util.*,lecture1.*" %>
 <%
 request.setCharacterEncoding("UTF-8");
 
-String 에러메시지 = null;
-String s1 = request.getParameter("id");
-int id = ParseUtils.parseInt(s1, 0);
-User user = null;
 String pg = request.getParameter("pg");
+String srchText = request.getParameter("srchText");
+if (srchText == null) srchText = "";
+String srchTextEncoded = URLEncoder.encode(srchText, "UTF-8");
+
+String userEnabled=request.getParameter("userEnabled");
+if(userEnabled==null) userEnabled="";
+
+String 에러메시지 = null;
+User user = new User();
 
 if (request.getMethod().equals("GET")) {
-   user = UserDAO.findOne(id);
-}
-else {
-    user = new User();
-    user.setId(id);
+	user.setUserid("");
+	user.setPassword("cc3e747a6afbbcbf8be7668acfebee5");
+	user.setName("");
+	user.setEmail("");
+	user.setUserType("학생");
+} else {
+	user=new User();
     user.setUserid(request.getParameter("userId"));
     user.setName(request.getParameter("userName"));
+    user.setPassword(request.getParameter("userPassword"));
     user.setEmail(request.getParameter("userEmail"));
+    if(userEnabled.equals("true")) user.setEnabled(true);
+    else user.setEnabled(false);
     user.setUserType(request.getParameter("userType"));
     String s2 = request.getParameter("departmentId");
     user.setDepartmentId(ParseUtils.parseInt(s2, 1));
     
-    if (s1 == null || s1.length() == 0) 
-        에러메시지 = "ID를 입력하세요";
-    else if (user.getUserid()==null || user.getUserid().length() == 0) 
+    if (user.getUserid()==null || user.getUserid().length() == 0) 
         에러메시지 = "아이디를 입력하세요";
     else if (user.getName() == null || user.getName().length() == 0) 
         에러메시지 = "이름을 입력하세요";
+    else if (user.getPassword()==null||user.getPassword().length()==0)
+    	에러메시지 = "패스워드를 입력하세요";
     else if (user.getEmail() == null || user.getEmail().length() == 0) 
         에러메시지 = "이메일을 입력하세요";
     else if (user.getUserType() == null || user.getUserType().length() == 0) 
-        에러메시지 = "이메일을 입력하세요";
+        에러메시지 = "타입을 입력하세요";
     else {
-        UserDAO.update(user);
-        response.sendRedirect("userList.jsp?pg=" + pg);
+        UserDAO.insert(user);
+        response.sendRedirect("userList.jsp?pg=99999");
         return;
     }
 }
@@ -62,8 +72,11 @@ else {
 <form method="post">
   <div class="form-group">
     <label>아이디</label>
-    <input type="text" class="form-control" name="userId" 
-           value="<%= user.getUserid() %>" />
+    <input type="text" class="form-control" name="userId" value="<%= user.getUserid() %>" />
+  </div>
+  <div class="form-group">
+    <label>비밀번호</label>
+    <input type="text" class="form-control" name="userPassword"   value="<%= user.getPassword() %>" />
   </div>
   <div class="form-group">
     <label>이름</label>
@@ -80,9 +93,14 @@ else {
       <% } %>
     </select>
   </div>
-  <div class="form-group">
+   <div class="form-group">
     <label>이메일</label>
     <input type="text" class="form-control" name="userEmail" value="<%= user.getEmail() %>" />
+  </div>
+   <div class="checkbox">
+  	<label>
+  		<input type="checkbox" name="userEnabled"  value=true/>enabled
+  	</label>
   </div>
     <div class="form-group">
     <label>타입</label>
@@ -91,9 +109,9 @@ else {
   <button type="submit" class="btn btn-primary">
     <i class="glyphicon glyphicon-ok"></i> 저장
   </button>
-  <a href="userDelete.jsp?id=<%= id %>&pg=<%= pg %>" class="btn btn-default" 
-     onclick="return confirm('삭제하시겠습니까?')">
-    <i class="glyphicon glyphicon-trash"></i> 삭제
+      <a href="userList.jsp?pg=<%= pg %>&srchText=<%= srchTextEncoded %>" 
+     class="btn btn-default">
+    <i class="glyphicon glyphicon-list"></i> 목록으로
   </a>
 </form>
 

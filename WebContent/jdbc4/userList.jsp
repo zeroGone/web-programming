@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, Study.jdbc4.*, lecture1.*" %>
+<%@ page import="java.util.*, Study.jdbc4.*,lecture1.*" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%
     int currentPage = 1;
