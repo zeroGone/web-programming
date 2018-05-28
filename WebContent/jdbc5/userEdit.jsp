@@ -12,20 +12,6 @@ String srchText = request.getParameter("srchText");
 if (srchText == null) srchText = "";
 String srchTextEncoded = URLEncoder.encode(srchText, "UTF-8");
 
-String enabled = request.getParameter("userEnabled");
-
-if(enabled==null) enabled="";
-boolean userEnabled = false;
-String checked="";
-
-if(enabled.equals("true")){
-	userEnabled=true;
-	checked="checked";
-}else{
-	userEnabled=false;
-	checked="";
-}
-
 
 User user = null;
 if (request.getMethod().equals("GET")) {
@@ -37,7 +23,9 @@ else {
     user.setUserid(request.getParameter("userId"));
    	user.setPassword(request.getParameter("userPassword"));
     user.setName(request.getParameter("userName"));
-    user.setEnabled(userEnabled);
+    String enabled = request.getParameter("userEnabled");
+    if(enabled==null) user.setEnabled(false);
+    else user.setEnabled(true);
     user.setEmail(request.getParameter("userEmail"));
     user.setUserType(request.getParameter("userType"));
     String s2 = request.getParameter("departmentId");
@@ -112,6 +100,9 @@ else {
     <input type="text" class="form-control" name="userEmail" value="<%= user.getEmail() %>" />
   </div>
   <div class="checkbox">
+  <%String checked="";
+  if(user.isEnabled()) checked="checked";
+  %>
   	<label>
   		<input type="checkbox" name="userEnabled"  value="true" <%=checked%>/>enabled
   	</label>
