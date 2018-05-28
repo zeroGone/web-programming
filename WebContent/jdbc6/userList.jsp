@@ -69,7 +69,7 @@ List<User> list = UserDAO.findByName(srchText, currentPage, pageSize, od);
 					<th>password</th>
 					<th>이름</th>
 					<th>email</th>
-					<th>학과번호</th>
+					<th>학과이름</th>
 					<th>enabled</th>
 					<th>타입</th>
 				</tr>
@@ -85,7 +85,7 @@ List<User> list = UserDAO.findByName(srchText, currentPage, pageSize, od);
 					<td><%=user.getPassword()%>
 					<td><%=user.getName()%></td>
 					<td><%=user.getEmail()%></td>
-					<td><%=user.getDepartmentId()%></td>
+					<td><%=user.getDepartmentName()%></td>
 					<td><%=user.isEnabled()%></td>
 					<td><%=user.getUserType()%></td>
 				</tr>

@@ -5,12 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import lecture1.DB;
-
 public class UserDAO {
 	
-	public static ArrayList<User> findByName(String name, int currentPage, int pageSize, String od) throws Exception {
+	public static List<User> findByName(String name, int currentPage, int pageSize, String od) throws Exception {
         String order="ID";
         switch (od) {
         case "1": order = "departmentId"; break;
@@ -38,6 +36,7 @@ public class UserDAO {
 					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setDepartmentId(resultSet.getInt("departmentId"));
 					user.setUserType(resultSet.getString("userType"));
+					user.setDepartmentName(resultSet.getString("departmentName"));
 					list.add(user);
                 }
                 return list;
@@ -60,9 +59,9 @@ public class UserDAO {
 
 
 	public static List<User> findAll(int currentPage,int pageSize) throws Exception {
-		String sql = "SELECT * " +
-				"FROM user " +
-				"LIMIT ?, ?";
+		String sql = "SELECT u.*, d.departmentName " +
+				"FROM user u left join department d on u.departmentId=d.id " +
+				"LIMIT ?, ?;";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql)){
 			statement.setInt(1, (currentPage-1)*pageSize);
@@ -76,9 +75,10 @@ public class UserDAO {
 					user.setPassword(resultSet.getString("password"));
 					user.setName(resultSet.getString("name"));
 					user.setEmail(resultSet.getString("email"));
-					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setDepartmentId(resultSet.getInt("departmentId"));
+					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setUserType(resultSet.getString("userType"));
+					user.setDepartmentName(resultSet.getString("departmentName"));
 					list.add(user);
 				}
 				return list;
@@ -87,7 +87,9 @@ public class UserDAO {
 	}
 	
 	public static User findOne(int id) throws Exception {
-        String sql = "SELECT * FROM user WHERE id=?";
+        String sql = "SELECT u.*, d.departmentName "+
+        		"FROM user u left join department d on u.departmentId=d.id "+
+        		"WHERE u.id=?";
         try (Connection connection = DB.getConnection("student1");
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -99,9 +101,10 @@ public class UserDAO {
 					user.setPassword(resultSet.getString("password"));
 					user.setName(resultSet.getString("name"));
 					user.setEmail(resultSet.getString("email"));
-					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setDepartmentId(resultSet.getInt("departmentId"));
+					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setUserType(resultSet.getString("userType"));
+					user.setDepartmentName(resultSet.getString("departmentName"));
                     return user;
                 }
             }
