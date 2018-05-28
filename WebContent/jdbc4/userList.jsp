@@ -2,7 +2,7 @@
 <%@ page import="java.util.*, Study.jdbc4.*,lecture1.*" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%
-    int currentPage = 1;
+int currentPage = 1;
 int pageSize = 10;
 
 String pg = request.getParameter("pg");
@@ -24,7 +24,6 @@ List<User> list = UserDAO.findAll(currentPage, pageSize);
   <style>
       body { font-family: 굴림체; }
       thead th { background-color: #eee; }
-      table.table { width: 700px; }
       tr:hover td { background-color: #ffe; cursor: pointer; }
       #createButton { margin-left: 590px; margin-bottom: 4px; }
   </style>
@@ -41,22 +40,26 @@ List<User> list = UserDAO.findAll(currentPage, pageSize);
 <table class="table table-bordered table-condensed">
     <thead>
         <tr>
-            <th>id</th>
-            <th>userId</th>
+        	<th>id</th>
+            <th>유저아이디</th>
+            <th>비밀번호</th>
             <th>이름</th>
-            <th>email</th>
-            <th>학과번호</th>
-            <th>타입</th>
+            <th>이메일</th>
+            <th>학과이름</th>
+            <th>enabled</th>
+            <th>사용자유형</th>
         </tr>
     </thead>
     <tbody>
         <% for (User user : list) { %>
             <tr data-url="userEdit.jsp?id=<%= user.getId() %>&pg=<%= currentPage %>">
-                <td><%= user.getId() %></td>
-                <td><%= user.getUserid() %></td>
-                <td><%= user.getName() %></td>
+            	<td><%=user.getId() %></td>
+                <td><%=user.getUserid() %></td>
+                <td><%=user.getPassword() %></td>
+                <td><%=user.getName() %></td>
                 <td><%= user.getEmail() %></td>
-                <td><%= user.getDepartmentId() %></td>
+                <td><%= user.getDepartmentName() %></td>
+                <td><%=user.isEnabled() %></td>
                 <td><%= user.getUserType() %></td>
             </tr>
         <% } %>

@@ -12,9 +12,9 @@ import lecture1.DB;
 public class UserDAO {
 	
 	public static List<User> findAll(int currentPage,int pageSize) throws Exception {
-		String sql = "SELECT * " +
-				"FROM user " +
-				"LIMIT ?, ?";
+		String sql = "SELECT u.*, d.departmentName " +
+				"FROM user u left join department d on u.departmentId=d.id " +
+				"LIMIT ?, ?;";
 		try (Connection connection = DB.getConnection("student1");
 				PreparedStatement statement = connection.prepareStatement(sql)){
 			statement.setInt(1, (currentPage-1)*pageSize);
@@ -28,9 +28,10 @@ public class UserDAO {
 					user.setPassword(resultSet.getString("password"));
 					user.setName(resultSet.getString("name"));
 					user.setEmail(resultSet.getString("email"));
-					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setDepartmentId(resultSet.getInt("departmentId"));
+					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setUserType(resultSet.getString("userType"));
+					user.setDepartmentName(resultSet.getString("departmentName"));
 					list.add(user);
 				}
 				return list;
@@ -51,7 +52,9 @@ public class UserDAO {
 	}
 	
 	public static User findOne(int id) throws Exception {
-        String sql = "SELECT * FROM user WHERE id=?";
+        String sql = "SELECT u.*, d.departmentName "+
+        		"FROM user u left join department d on u.departmentId=d.id "+
+        		"WHERE u.id=?";
         try (Connection connection = DB.getConnection("student1");
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -63,9 +66,10 @@ public class UserDAO {
 					user.setPassword(resultSet.getString("password"));
 					user.setName(resultSet.getString("name"));
 					user.setEmail(resultSet.getString("email"));
-					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setDepartmentId(resultSet.getInt("departmentId"));
+					user.setEnabled(resultSet.getBoolean("enabled"));
 					user.setUserType(resultSet.getString("userType"));
+					user.setDepartmentName(resultSet.getString("departmentName"));
                     return user;
                 }
             }
@@ -73,25 +77,27 @@ public class UserDAO {
         }
     }
 
-    public static void update(User user) throws Exception {
-        String sql = "UPDATE user SET userid=?, name=?, email=?, departmentId=?, userType=? " +
+	public static void update(User user) throws Exception {
+        String sql = "UPDATE user SET userid=?, password=?, name=?, email=?, enabled=?, departmentId=?, userType=? " +
                      " WHERE id = ?";
         try (Connection connection = DB.getConnection("student1");
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1,user.getUserid());
-            statement.setString(2, user.getName());
-            statement.setString(3, user.getEmail());
-            statement.setInt(4, user.getDepartmentId());
-            statement.setString(5, user.getUserType());
-            statement.setInt(6, user.getId());
+            statement.setString(2,user.getPassword());
+            statement.setString(3, user.getName());
+            statement.setString(4, user.getEmail());
+            statement.setBoolean(5, user.isEnabled());
+            statement.setInt(6, user.getDepartmentId());
+            statement.setString(7, user.getUserType());
+            statement.setInt(8, user.getId());
             statement.executeUpdate();
         }
     }
     
     public static void insert(User user) throws Exception{
-    	String sql ="INSERT user(id,userId,password,name,email,departmentId,enabled,userType)"+
-    			"VALUES(?,?,?,?,?)";
-    	try(Connection connection = DB.getConnection("user");
+    	String sql ="INSERT user(userId,password,name,email,departmentId,enabled,userType) "+
+    			"VALUES(?,?,?,?,?,?,?)";
+    	try(Connection connection = DB.getConnection("student1");
     			PreparedStatement statement = connection.prepareStatement(sql)){
     		statement.setString(1, user.getUserid());
     		statement.setString(2, user.getPassword());
@@ -100,12 +106,13 @@ public class UserDAO {
     		statement.setInt(5, user.getDepartmentId());
     		statement.setBoolean(6, user.isEnabled());
     		statement.setString(7, user.userType);
+    		statement.executeUpdate();
     	}
     }
     
     public static void delete(int id) throws Exception {
         String sql = "DELETE FROM user WHERE id = ?";
-        try (Connection connection = DB.getConnection("user");
+        try (Connection connection = DB.getConnection("student1");
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
