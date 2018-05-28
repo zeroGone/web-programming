@@ -22,7 +22,6 @@ int recordCount =UserDAO.count();
   <style>
       body { font-family: 굴림체; }
       thead th { background-color: #eee; }
-      table.table { width: 700px; }
       tr:hover td { background-color: #ffe; cursor: pointer; }
   </style>
 </head>
@@ -36,9 +35,11 @@ int recordCount =UserDAO.count();
         <tr>
         	<th>id</th>
             <th>유저아이디</th>
+            <th>비밀번호</th>
             <th>이름</th>
             <th>이메일</th>
-            <th>학과번호</th>
+            <th>학과이름</th>
+            <th>enabled</th>
             <th>사용자유형</th>
         </tr>
     </thead>
@@ -46,10 +47,12 @@ int recordCount =UserDAO.count();
         <% for (User user : list) { %>
             <tr data-url="userEdit.jsp?id=<%= user.getId() %>">
             	<td><%=user.getId() %></td>
-                <td><%= user.getUserid() %></td>
-                <td><%= user.getName() %></td>
+                <td><%=user.getUserid() %></td>
+                <td><%=user.getPassword() %></td>
+                <td><%=user.getName() %></td>
                 <td><%= user.getEmail() %></td>
-                <td><%= user.getDepartmentId() %></td>
+                <td><%= user.getDepartmentName() %></td>
+                <td><%=user.isEnabled() %></td>
                 <td><%= user.getUserType() %></td>
             </tr>
         <% } %>
