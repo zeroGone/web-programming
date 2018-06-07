@@ -59,6 +59,7 @@ public class ArticleDAO {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     Article article = new Article();
+                    article.setId(resultSet.getInt("id"));
                     article.setTitle(resultSet.getString("title"));
                     article.setBody(resultSet.getString("body"));
                     article.setUserId(resultSet.getInt("userId"));

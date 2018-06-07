@@ -22,21 +22,20 @@ if (request.getMethod().equals("GET")) {
 }
 else {
     article = new Article();
+    article.setId(id);
     article.setTitle(request.getParameter("title"));
     article.setBody(request.getParameter("body"));
     String s2 = request.getParameter("userId");
     article.setUserId(ParseUtils.parseInt(s2, 1));
-    String s3 = request.getParameter("notice");
-    
+    String s3 = request.getParameter("notice")==null?"":"true";
+	
     if(s3.equals("true")) article.setNotice(true);
     else article.setNotice(false);
     
     if (article.getTitle() == null || article.getTitle().length() == 0) 
         에러메시지 = "제목을 입력하세요";
     else if (article.getBody() == null || article.getBody().length() == 0) 
-        에러메시지 = "이름을 입력하세요";
-    else if (s3 == null || s3.length() == 0) 
-        에러메시지 = "학년을 입력하세요";
+        에러메시지 = "본문을 입력하세요";
     else {
         ArticleDAO.update(article);
         response.sendRedirect("list1.jsp?pg=" + pg + "&ss=" + ss + "&st=" + stEncoded + "&od=" + od);
@@ -91,7 +90,7 @@ else {
 }%>
   <div class="form-inline">
     <label>공지</label>
-    <input type="checkbox" class="form-control" name="notice" value="<%= article.isNotice() %>" <%=checked%>/>
+    <input type="checkbox" class="form-control" name="notice" value="true" <%=checked%>/>
   </div>
   <button type="submit" class="btn btn-primary">
     <i class="glyphicon glyphicon-ok"></i> 저장
