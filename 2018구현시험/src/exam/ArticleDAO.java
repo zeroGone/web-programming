@@ -3,6 +3,7 @@ package exam;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,18 +71,43 @@ public class ArticleDAO {
             return null;
         }
     }
-	
-	 public static void update(Article article) throws Exception {
-	        String sql = "UPDATE article SET title=?, body=?, userId=?, notice=? " +
-	                     " WHERE id = ?";
-	        try (Connection connection = DB.getConnection("bbs2");
-	             PreparedStatement statement = connection.prepareStatement(sql)) {
-	            statement.setString(1, article.getTitle());
-	            statement.setString(2, article.getBody());
-	            statement.setInt(3, article.getUserId());
-	            statement.setBoolean(4, article.isNotice());
-	            statement.setInt(5, article.getId());
-	            statement.executeUpdate();
-	        }
-	    }
+
+	public static void update(Article article) throws Exception {
+		String sql = "UPDATE article SET title=?, body=?, userId=?, notice=? " +
+				" WHERE id = ?";
+		try (Connection connection = DB.getConnection("bbs2");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, article.getTitle());
+			statement.setString(2, article.getBody());
+			statement.setInt(3, article.getUserId());
+			statement.setBoolean(4, article.isNotice());
+			statement.setInt(5, article.getId());
+			statement.executeUpdate();
+		}
+	}
+
+	public static void insert(Article article) throws Exception {
+		String sql = "INSERT article (no, title, body, userId, boardId, notice, writeTime)" +
+				" VALUES (?, ?, ?, ?, ?, ?, ?)";
+		try (Connection connection = DB.getConnection("bbs2");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setInt(1, article.getNo());
+			statement.setString(2, article.getTitle());
+			statement.setString(3, article.getBody());
+			statement.setInt(4, article.getUserId());
+			statement.setInt(5, article.getBoardId());
+			statement.setBoolean(6, article.isNotice());
+			statement.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+			statement.executeUpdate();
+		}
+	}
+
+	public static void delete(int id) throws Exception {
+        String sql = "DELETE FROM article WHERE id = ?";
+        try (Connection connection = DB.getConnection("bbs2");
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
 }

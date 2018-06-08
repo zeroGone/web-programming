@@ -108,7 +108,7 @@ else {
 <hr />
 <% if (에러메시지 != null) { %>
   <div class="alert alert-danger">
-    유저등록 실패: <%= 에러메시지 %>
+    게시글등록 실패: <%= 에러메시지 %>
   </div>
 <% } %>
 </div>
