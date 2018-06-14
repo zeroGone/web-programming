@@ -22,4 +22,36 @@ public class CategoryDAO {
             return list;
         }
     }
+	
+	public static String findOne(int id) throws Exception {
+        String sql = "SELECT *"
+        		+ " from category"
+        		+ " WHERE category_id=?";
+        try (Connection connection = DB.getConnection("sakila");
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString("name");
+                }
+            }
+            return null;
+        }
+    }
+	
+	public static int findOne(String name) throws Exception {
+        String sql = "SELECT *"
+        		+ " from category"
+        		+ " WHERE name=?";
+        try (Connection connection = DB.getConnection("sakila");
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("category_id");
+                }
+            }
+            return 0;
+        }
+    }
 }

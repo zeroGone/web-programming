@@ -37,7 +37,7 @@ else {
 	String s6 = request.getParameter("category");
 	int categoryId = ParseUtils.parseInt(s6, 1);
 	String s7 = request.getParameter("language");
-	film.setLanguageId(ParseUtils.parseInt(s5, 1));
+	film.setLanguageId(ParseUtils.parseInt(s7, 1));
    
     if (film.getTitle() == null || film.getTitle().length() == 0) 
      	   에러메시지 = "제목을 입력하세요";
@@ -82,7 +82,7 @@ else {
   </div>
   
   <div class="form-group">
-    <label>출시일</label>
+    <label>출시년도</label>
     <input type="text" class="form-control" name="releaseYear" 
            value="<%= film.getReleaseYear() %>" />
   </div>
@@ -91,7 +91,7 @@ else {
   	<label>대여기간</label>
   	<%for(int i=3; i<8; i++) {%>	
   		<label><%=i%></label>  	
-    	<input type="checkbox" class="form-control" name=rentalDuration vlaue="<%=i%>" 
+    	<input type="radio" class="form-control" name=rentalDuration value="<%=i%>" 
     	<%if(i==film.getRentalDuration()){%>checked<%}%>/>
     <%} %>
   </div>

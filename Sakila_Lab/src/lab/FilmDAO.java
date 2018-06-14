@@ -33,7 +33,6 @@ public class FilmDAO {
 					film.setLastUpdate(resultSet.getTimestamp("last_update"));
 					film.setCategory(resultSet.getString("category"));
 					film.setLanguageId(resultSet.getInt("language_id"));
-					
 					list.add(film);
 				}
 				return list;
@@ -104,7 +103,7 @@ public class FilmDAO {
 		}
 		
 		sql = "UPDATE film_category set category_id=?" +
-				" WHERE id = ?";
+				" WHERE film_id = ?";
 		try (Connection connection = DB.getConnection("sakila");
 				PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setInt(1, categoryId);
@@ -113,4 +112,59 @@ public class FilmDAO {
 		}
 	}
 	
+	public static int idSearch(String name) throws Exception {
+		String sql = "SELECT * from film where title=?";
+		try (Connection connection = DB.getConnection("sakila");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, name);
+			try(ResultSet resultSet = statement.executeQuery()){
+				if(resultSet.next()) return resultSet.getInt("film_id");
+			}
+		}
+		return 0;
+	}
+	
+	
+	public static void insert(Film film) throws Exception {
+		String sql = "INSERT film (title, description, release_year, language_id, rental_duration, rental_rate, length, last_update)" +
+				" VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (Connection connection = DB.getConnection("sakila");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setString(1, film.getTitle());
+			statement.setString(2, film.getDescription());
+			statement.setInt(3, film.getReleaseYear());
+			statement.setInt(4, film.getLanguageId());
+			statement.setInt(5, film.getRentalDuration());
+			statement.setDouble(6, film.getRentalRate());
+			statement.setInt(7, film.getLength());
+			statement.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
+			statement.executeUpdate();
+		}
+		int id = idSearch(film.getTitle());
+		int id2 = CategoryDAO.findOne(film.getCategory());
+		sql = "INSERT film_category (film_id, category_id)" +
+				" VALUES (?, ?)";
+		try (Connection connection = DB.getConnection("sakila");
+				PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setInt(1, id);
+			statement.setInt(2, id2);
+			statement.executeUpdate();
+		}
+		
+	}
+	public static void delete(int id) throws Exception {
+		String sql = "DELETE FROM film_category WHERE film_id = ?";
+        try (Connection connection = DB.getConnection("sakila");
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+        
+        sql = "DELETE FROM film WHERE film_id = ?";
+        try (Connection connection = DB.getConnection("sakila");
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
 }
