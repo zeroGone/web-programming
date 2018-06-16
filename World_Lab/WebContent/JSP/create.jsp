@@ -75,7 +75,7 @@
            value="<%= city.getName() %>" />
   </div>
   <div class="form-group">
-    <label>도시코드</label>
+    <label>나라코드</label>
     <input type="text" class="form-control" name="countryCode" 
            value="<%= city.getCountryCode() %>" />
   </div>

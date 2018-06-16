@@ -22,13 +22,14 @@ if (request.getMethod().equals("GET")) {
 }
 else {
     city = new City();
+    city.setId(id);
     city.setName(request.getParameter("name")==null?"":request.getParameter("name"));
 	city.setCountryCode(request.getParameter("countryCode")==null?"":request.getParameter("countryCode"));
 	city.setDistrict(request.getParameter("district")==null?"":request.getParameter("district"));
 	String s2 = request.getParameter("population");
 	city.setPopulation(ParseUtils.parseInt(s2, 100));
 	String s3 = request.getParameter("capital")==null?"false":request.getParameter("capital");
-	if(s2.equals("true")) city.setCapital(true);
+	if(s3.equals("true")) city.setCapital(true);
 	
 	if (city.getName() == null || city.getName().length() == 0)
 		에러메시지 = "이름을 입력하세요";
@@ -70,7 +71,7 @@ else {
            value="<%= city.getName() %>" />
   </div>
   <div class="form-group">
-    <label>도시코드</label>
+    <label>나라코드</label>
     <input type="text" class="form-control" name="countryCode" 
            value="<%= city.getCountryCode() %>" />
   </div>
