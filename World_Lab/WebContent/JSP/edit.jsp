@@ -39,6 +39,8 @@ else {
 		에러메시지 = "지역를 입력하세요";
 	else if (city.getPopulation()==0)
 		에러메시지 = "인구 수를 입력하세요";
+	else if (CityDAO.findCountry(city.getCountryCode())==false)
+		에러메시지 = "그런 국가가 없음";
 	else {
 		CityDAO.update(city);
 		response.sendRedirect("list.jsp?pg=" + pg + "&ss=" + ss + "&st=" + stEncoded + "&od=" + od);
